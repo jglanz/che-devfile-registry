@@ -45,4 +45,3 @@ The release process is the same as for the Major / Minor one, but the values pas
 ```
 ./make-release.sh --repo git@github.com:eclipse/che-devfile-registry --version 7.7.1 --trigger-release
 ```
-
