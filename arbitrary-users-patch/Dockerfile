@@ -8,6 +8,14 @@ RUN mkdir -p /home/user && chgrp -R 0 /home && chmod -R g=u /etc/passwd /etc/gro
 # Install common terminal editors in container to aid development process
 COPY install-editor-tooling.sh /tmp
 RUN /tmp/install-editor-tooling.sh && rm -f /tmp/install-editor-tooling.sh
+ENV USER_HOME /home/${USER_NAME:-user}
+RUN mkdir -p ${USER_HOME}
+RUN echo "${USER_NAME:-user} ALL = (ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers && echo "/etc/sudoers" && cat /etc/sudoers
+RUN echo "${USER_NAME:-user}:x:$(id -u):0:${USER_NAME:-user}:${USER_HOME}:/bin/bash" >> /etc/passwd
+RUN echo "${USER_NAME:-user}:x:$(id -u):" >> /etc/group
+RUN echo "${USER_NAME:-user}:*:18374:0:99999:7:::" >> /etc/shadow
+#RUN cat /etc/shadow | egrep '^pkiuser'
+#RUN echo "${USER_NAME:-user} ALL = (ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER 10001
 ENV HOME=/home/user
